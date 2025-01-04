@@ -2,7 +2,7 @@
 
 A feature-rich dashboard application built with **Next.js**, **TypeScript**, and **Jest**, integrated with **Supabase** for debts management.
 
-![alt text](image.png)
+![sample](image.png)
 
 ## 🚀 Features
 
@@ -36,5 +36,5 @@ A feature-rich dashboard application built with **Next.js**, **TypeScript**, and
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/lcsdovalle/nextjs-dashboard.git
+   git clone https://github.com/lcsdovalle/debts-and-payments
    cd nextjs-dashboard
