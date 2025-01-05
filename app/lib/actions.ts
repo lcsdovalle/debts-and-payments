@@ -12,10 +12,11 @@ const FormScheam = z.object({
         invalid_type_error:  'Please select a customer',
     }),
     amount: z.coerce.number().gt(0, 'Amount must be greater than 0'),
-    status: z.enum(['pending', 'paid'], {
+    status: z.enum(['pending', 'paid', 'late'], {
         invalid_type_error: 'Please select an invoice status',
     }),
     date: z.string(),
+    description: z.string()
 });
 
 const CreateInvoice = FormScheam.omit({ id: true, date: true });
@@ -25,6 +26,7 @@ export type State = {
         customerId?: string[];
         amount?: string[];
         status?: string[];
+        description?: string[]
     },
     message? : string | null;
 };
@@ -34,6 +36,7 @@ export async function createInvoice(prevState: State, formData: FormData): Promi
         customerId: formData.get('customerId'),
         amount: formData.get('amount'),
         status: formData.get('status'),
+        description: formData.get('description')
     })
     if (!validatedFields.success) {
         return {
@@ -41,22 +44,23 @@ export async function createInvoice(prevState: State, formData: FormData): Promi
             message: 'Missing fields. Failed to create invoice!',
         }
     }
-    const { customerId, amount, status } = validatedFields.data;
+    const { customerId, amount, status, description } = validatedFields.data;
     const amountInCents = amount * 100;
     const date = new Date().toISOString().split('T')[0];
     const client = await getSqlClient();
     try {
-        await client.sql`INSERT INTO invoices (customer_id, amount, status, date) VALUES (${customerId}, ${amountInCents}, ${status}, ${date})`;
+        await client.sql`INSERT INTO invoices (customer_id, amount, status, date, description) VALUES (${customerId}, ${amountInCents}, ${status}, ${date}, ${description})`;
         revalidatePath('/dashboard/invoices');
-        return {
-            message: 'Invoice created successfully!',
-        };
     } catch (error) {
         console.error('Database Error:', error);
         return {
             message: 'Database Error: Failed to Create Invoice.',
         };
+    } finally {
+        client.end();
     }
+    revalidatePath('/dashboard/invoices');
+    redirect('/dashboard/invoices')
 }
 
 export async function updateInvoice(id: string, _: State, formData: FormData): Promise<State> {
@@ -67,6 +71,7 @@ export async function updateInvoice(id: string, _: State, formData: FormData): P
         customerId: formData.get('customerId'),
         amount: formData.get('amount'),
         status: formData.get('status'),
+        description: formData.get('description')
     })
     if (!validatedFields.success) {
         return {
@@ -74,32 +79,34 @@ export async function updateInvoice(id: string, _: State, formData: FormData): P
             message: 'Missing fields. Failed to update invoice!',
         }
     }
-    const { customerId, amount, status } = validatedFields.data;
+    const { customerId, amount, status, description } = validatedFields.data;
     const amountInCents = amount * 100;
+    const client = await getSqlClient();
     try {
-        const client = await getSqlClient();
-        await client.sql`UPDATE invoices SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status} WHERE id = ${id}`;
-        return {
-            message: 'Invoice updated successfully!',
-        }
+        await client.sql`UPDATE invoices SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}, description = ${description} WHERE id = ${id}`;
+        
     } catch (error) {
         console.error('Database Error:', error);
         return {
             message: 'Database Error: Failed to update invoice.',
         }
+    } finally {
+        client.end();
     }
     revalidatePath('/dashboard/invoices');
     redirect('/dashboard/invoices');
 }
 
 export async function deleteInvoice(id: string) {
+    const client = await getSqlClient();
     try {
-        const client = await getSqlClient();
         await client.sql`DELETE FROM invoices WHERE id = ${id}`;
         
     } catch (error) {
         console.error('Database Error:', error);
         throw new Error('Failed to delete invoice');
+    } finally {
+        client.end();
     }
     revalidatePath('/dashboard/invoices');
 }

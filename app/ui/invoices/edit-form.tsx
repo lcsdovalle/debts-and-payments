@@ -66,6 +66,38 @@ export default function EditInvoiceForm({
           </div>
         </div>
 
+
+        {/* Description */}
+        <div className="mb-4">
+          <label htmlFor="amount" className="mb-2 block text-sm font-medium">
+            Título
+          </label>
+          <div className="relative mt-2 rounded-md">
+            <div className="relative">
+              <input
+                id="description"
+                name="description"
+                type="text"
+                placeholder="Título"
+                defaultValue={invoice.description}
+                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                required
+              />
+            </div>
+            <div
+              id="description-error"
+              aria-describedby="description-error"
+              aria-live="polite"
+            >
+              {state.errors?.description?.map((error) => (
+                <p key={error} className="text-red-500 text-xs mt-1">
+                  {error}
+                </p>
+              ))}
+            </div>
+          </div>
+        </div>
+
         {/* Invoice Amount */}
         <div className="mb-4">
           <label htmlFor="amount" className="mb-2 block text-sm font-medium">

@@ -26,7 +26,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
         {/* Customer Name */}
         <div className="mb-4">
           <label htmlFor="customer" className="mb-2 block text-sm font-medium">
-            Choose customer
+            Escolha um cliente
           </label>
           <div className="relative">
             <select
@@ -36,7 +36,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
               defaultValue=""
             >
               <option value="" disabled>
-                Select a customer
+                Escolha um cliente
               </option>
               {customers.map((customer) => (
                 <option key={customer.id} value={customer.id}>
@@ -59,10 +59,42 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
           </div>
         </div>
 
+
+        {/* Description */}
+        <div className="mb-4">
+          <label htmlFor="amount" className="mb-2 block text-sm font-medium">
+            Título
+          </label>
+          <div className="relative mt-2 rounded-md">
+            <div className="relative">
+              <input
+                id="description"
+                name="description"
+                type="text"
+                placeholder="Título"
+                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                required
+              />
+            </div>
+            <div
+              id="description-error"
+              aria-describedby="description-error"
+              aria-live="polite"
+            >
+              {state.errors?.description?.map((error) => (
+                <p key={error} className="text-red-500 text-xs mt-1">
+                  {error}
+                </p>
+              ))}
+            </div>
+          </div>
+        </div>
+
+
         {/* Invoice Amount */}
         <div className="mb-4">
           <label htmlFor="amount" className="mb-2 block text-sm font-medium">
-            Choose an amount
+            Informe o valor
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
@@ -71,7 +103,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
                 name="amount"
                 type="number"
                 step="0.01"
-                placeholder="Enter USD amount"
+                placeholder="Informe em R$"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 required
               />
@@ -94,7 +126,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
         {/* Invoice Status */}
         <fieldset>
           <legend className="mb-2 block text-sm font-medium">
-            Set the invoice status
+            Defina o statatus
           </legend>
           <div className="rounded-md border border-gray-200 bg-white px-[14px] py-3">
             <div className="flex gap-4">
@@ -112,6 +144,22 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600"
                 >
                   Pending <ClockIcon className="h-4 w-4" />
+                </label>
+              </div>
+              <div className="flex items-center">
+                <input
+                  id="late"
+                  name="status"
+                  type="radio"
+                  value="late"
+                  className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
+                  required
+                />
+                <label
+                  htmlFor="late"
+                  className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600"
+                >
+                  Late <ClockIcon className="h-4 w-4" />
                 </label>
               </div>
               <div className="flex items-center">

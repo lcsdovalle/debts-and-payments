@@ -7,13 +7,15 @@ import { User } from "@/app/lib/definitions";
 import bcrypt from 'bcrypt';
 
 export async function getUser(email: string): Promise<User | null> {
+    const client = await getSqlClient();
     try {
-        const client = await getSqlClient();
         const user = await client.sql<User>`SELECT * FROM users WHERE email = ${email}`;
         return user.rows[0] ?? null;
     } catch (error) {
         console.error("Database Error:", error);
         throw new Error("Failed to fetch user data.");
+    } finally {
+        client.end();
     }
 }
 
