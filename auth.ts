@@ -23,7 +23,6 @@ export const { auth, signIn, signOut } = NextAuth({
     ...authConfig,
     providers: [Credentials({
         async authorize(credentials) {
-            console.log("CREDENTIALS", credentials);
             const parsedCredentials = z.object({
                 email: z.string({
                     message: 'Invalid username',
