@@ -30,7 +30,6 @@ export default function EditInvoiceForm({
   const updateInvoiceWithid =  updateInvoice.bind(null, invoice.id);
   const [state, formAction] = useActionState(updateInvoiceWithid,initialState);
   const date = new Date(invoice.due_date).toISOString().split("T")[0]
-  date
   return (
     <form action={formAction}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
