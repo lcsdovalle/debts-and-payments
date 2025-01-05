@@ -4,14 +4,16 @@ import {
   UserGroupIcon,
   HomeIcon,
   DocumentDuplicateIcon,
+  QueueListIcon
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
-// Map of links to display in the side navigation.
-// Depending on the size of the application, this would be stored in a database.
 const links = [
   { name: "Início", href: "/dashboard", icon: HomeIcon },
+  {
+    name: "Minhas dívidas", href: "/dashboard/mydebts", icon: QueueListIcon
+  },
   {
     name: "Dívidas",
     href: "/dashboard/invoices",
