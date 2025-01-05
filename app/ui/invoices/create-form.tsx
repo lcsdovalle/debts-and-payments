@@ -6,6 +6,8 @@ import {
   ClockIcon,
   CurrencyDollarIcon,
   UserCircleIcon,
+  CalendarDateRangeIcon,
+  DocumentTextIcon
 } from "@heroicons/react/24/outline";
 import { Button } from "@/app/ui/button";
 import { createInvoice, State } from "@/app/lib/actions";
@@ -67,6 +69,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
+            <DocumentTextIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
               <input
                 id="description"
                 name="description"
@@ -126,7 +129,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
         {/* Invoice Status */}
         <fieldset>
           <legend className="mb-2 block text-sm font-medium">
-            Defina o statatus
+            Status
           </legend>
           <div className="rounded-md border border-gray-200 bg-white px-[14px] py-3">
             <div className="flex gap-4">
@@ -191,6 +194,41 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
             </div>
           </div>
         </fieldset>
+      
+      
+        {/* Due Date */}
+        <div className="mb-4 mt-4">
+          <label htmlFor="amount" className="mb-2 block text-sm font-medium">
+            Data de vencimento
+          </label>
+          <div className="relative mt-2 rounded-md">
+            <div className="relative">
+                <CalendarDateRangeIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+              <input
+                id="due_date"
+                name="due_date"
+                type="date"
+                placeholder="Vencimento"
+                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                required
+              />
+            </div>
+            <div
+              id="due_date-error"
+              aria-describedby="due_date-error"
+              aria-live="polite"
+            >
+              {state.errors?.due_date?.map((error) => (
+                <p key={error} className="text-red-500 text-xs mt-1">
+                  {error}
+                </p>
+              ))}
+            </div>
+          </div>
+        </div>
+
+
+      
       </div>
       <div className="mt-6 flex justify-end gap-4">
         <Link

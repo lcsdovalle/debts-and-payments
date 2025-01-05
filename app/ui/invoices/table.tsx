@@ -68,10 +68,10 @@ export default async function InvoicesTable({
                   Description
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Amount
+                  Valor
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Date
+                  Vencimento
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
                   Status
@@ -110,6 +110,9 @@ export default async function InvoicesTable({
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
                     {formatDateToLocal(invoice.date)}
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-3">
+                    {invoice.due_date}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
                     <InvoiceStatus status={invoice.status} />

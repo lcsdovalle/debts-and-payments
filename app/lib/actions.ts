@@ -16,7 +16,8 @@ const FormScheam = z.object({
         invalid_type_error: 'Please select an invoice status',
     }),
     date: z.string(),
-    description: z.string()
+    description: z.string(),
+    due_date: z.string()
 });
 
 const CreateInvoice = FormScheam.omit({ id: true, date: true });
@@ -26,7 +27,8 @@ export type State = {
         customerId?: string[];
         amount?: string[];
         status?: string[];
-        description?: string[]
+        description?: string[];
+        due_date?: string[];
     },
     message? : string | null;
 };
@@ -36,7 +38,8 @@ export async function createInvoice(prevState: State, formData: FormData): Promi
         customerId: formData.get('customerId'),
         amount: formData.get('amount'),
         status: formData.get('status'),
-        description: formData.get('description')
+        description: formData.get('description'),
+        due_date: formData.get('due_date')
     })
     if (!validatedFields.success) {
         return {
@@ -71,7 +74,8 @@ export async function updateInvoice(id: string, _: State, formData: FormData): P
         customerId: formData.get('customerId'),
         amount: formData.get('amount'),
         status: formData.get('status'),
-        description: formData.get('description')
+        description: formData.get('description'),
+        due_date: formData.get('due_date')
     })
     if (!validatedFields.success) {
         return {
@@ -79,11 +83,11 @@ export async function updateInvoice(id: string, _: State, formData: FormData): P
             message: 'Missing fields. Failed to update invoice!',
         }
     }
-    const { customerId, amount, status, description } = validatedFields.data;
+    const { customerId, amount, status, description, due_date } = validatedFields.data;
     const amountInCents = amount * 100;
     const client = await getSqlClient();
     try {
-        await client.sql`UPDATE invoices SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}, description = ${description} WHERE id = ${id}`;
+        await client.sql`UPDATE invoices SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}, description = ${description}, due_date = ${due_date} WHERE id = ${id}`;
         
     } catch (error) {
         console.error('Database Error:', error);
@@ -109,6 +113,7 @@ export async function deleteInvoice(id: string) {
         client.end();
     }
     revalidatePath('/dashboard/invoices');
+    redirect('/dashboard/invoices')
 }
 
 

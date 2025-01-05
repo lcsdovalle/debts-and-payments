@@ -35,6 +35,7 @@ export type LatestInvoice = {
   image_url: string;
   email: string;
   amount: string;
+  description?: string;
   status: 'pending' | 'paid';
 };
 
@@ -50,6 +51,7 @@ export type InvoicesTable = {
   email: string;
   image_url: string;
   description: string;
+  due_date: string;
   date: string;
   amount: number;
   status: 'pending' | 'paid';
@@ -85,5 +87,6 @@ export type InvoiceForm = {
   customer_id: string;
   amount: number;
   description?: string;
+  due_date: string;
   status: 'pending' | 'paid';
 };
