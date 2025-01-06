@@ -188,6 +188,35 @@ export async function fetchInvoicesPages(query: string) {
   }
 }
 
+
+export async function fetchInvoiceByEmail(email: string) {
+  const client = await getClient();
+  try {
+    const r = await client.sql`
+      SELECT DISTINCT
+        invoices.id,
+        invoices.amount,
+        invoices.date,
+        invoices.status,
+        invoices.description,
+        customers.name,
+        customers.email,
+        customers.image_url
+      FROM invoices
+      JOIN customers ON invoices.customer_id = customers.id
+      WHERE customers.email = ${email}
+      GROUP BY invoices.id, invoices.amount, invoices.date, invoices.status, invoices.description, customers.name, customers.email, customers.image_url
+    `;
+    return r.rows;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch invoices by email.");
+  } finally {
+    client.end();
+  }
+}
+
+
 export async function fetchInvoiceById(id: string) {
   const client = await getClient()
   try {
